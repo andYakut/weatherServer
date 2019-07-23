@@ -1,22 +1,19 @@
 const User = require('../models/user.model');
 
-exports.createUser = async (user) => {
-  const { username } = user;
-
+exports.createUser = async (param) => {
   try {
-    const hasUser = await User.find( { username }, function(err, data) {
-      if(err) return err;
-    } );
-
-    if(hasUser.length !== 0) {
-      throw Error(`User with name ${username} already exsist`);
-    }
-
-    await User.create( user, function (err, data) {
-      if(err) return err;
-    });
-
+    const result = await User.create( param );
+    return result;
   } catch(e) {
     throw Error(`Can't create a user ${user.name}`)
+  }
+}
+
+exports.findUser = async (param) => {
+  try {
+    const result = await User.find(param)
+    return result;
+  } catch(e) {
+    throw Error(`Can't find a user ${user.name}`)
   }
 }
