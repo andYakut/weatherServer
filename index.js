@@ -1,5 +1,7 @@
-let express = require('express'),
+const express = require('express'),
     bodyParser = require('body-parser'),
+    mongoose = require('mongoose'),
+    user = require('./routes/user.routes'),
     server = express();
 
 server.use(bodyParser.json());
@@ -11,13 +13,14 @@ server.use(function(req, res, next) {
   next();
 });
 
-server.post('/login', (req, res) => {
-  console.log(req.body);
-  res.json(req.body);
+mongoose.connect('mongodb://localhost:27017/weatherForecast', {useNewUrlParser: true}, (err) => {
+  if(err) return console.log(err);
+
+  server.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+  });
 });
+
+server.use('/user', user);
 
 const PORT = process.env.port || 3001;
-
-server.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
