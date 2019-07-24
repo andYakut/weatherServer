@@ -48,7 +48,8 @@ exports.authUser = async (req, res, next) => {
       let token = jwt.sign({email: user.email}, privateKey, {expiresIn: 129600});
       return res.status(200).json({
         success: true, 
-        message: "You are login now", 
+        message: "You are login now",
+        checkLoginCompleted: true,
         token
       });
     } else {
@@ -64,11 +65,9 @@ exports.authUser = async (req, res, next) => {
   }
 }
 
-exports.checkLogin = async (req, res) => {
-
-  const decode = jwt.verify(req.headers.token, privateKey);
-  
+exports.checkLogin = async (req, res) => {  
   try {
+    const decode = await jwt.verify(req.headers.token, privateKey);
     const user = await UserService.findUser({ email: decode.email });
     return res.status(200).json({message: "ok", checkLoginCompleted: true });
   } catch (e) {
