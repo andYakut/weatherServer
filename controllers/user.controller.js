@@ -46,15 +46,15 @@ exports.authUser = async (req, res, next) => {
     if(match) {
       let token = jwt.sign({email: user.email}, privateKey, {expiresIn: 129600});
       return res.status(200).json({
-        sucess: true, 
-        err: null, 
+        success: true, 
+        message: "You are login now", 
         token
       });
     } else {
       return res.status(401).json({
-        sucess: false, 
+        success: false, 
         token: null, 
-        err: 'Username or password is incorrect'
+        message: 'Username or password is incorrect'
       });
     }
 
