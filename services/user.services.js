@@ -11,7 +11,7 @@ exports.createUser = async (param) => {
 
 exports.findUser = async (param) => {
   try {
-    const result = await User.find(param)
+    const result = await User.findOne(param)
     return result;
   } catch(e) {
     throw Error(`Can't find a user ${user.name}`)
