@@ -44,6 +44,7 @@ exports.authUser = async (req, res, next) => {
     const match = await bcrypt.compare(req.body.password, user.password);
     
     if(match) {
+      //use id insted of email
       let token = jwt.sign({email: user.email}, privateKey, {expiresIn: 129600});
       return res.status(200).json({
         success: true, 
@@ -60,5 +61,17 @@ exports.authUser = async (req, res, next) => {
 
   } catch (e) {
     return res.status(400).json({ status: 400, message: e.message });
+  }
+}
+
+exports.checkLogin = async (req, res) => {
+
+  const decode = jwt.verify(req.headers.token, privateKey);
+  
+  try {
+    const user = await UserService.findUser({ email: decode.email });
+    return res.status(200).json({message: "ok", checkLoginCompleted: true });
+  } catch (e) {
+    return res.status(403).json({message: "Forbidden"});
   }
 }

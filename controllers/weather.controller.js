@@ -9,5 +9,5 @@ exports.getWeather = async (req, res, next) => {
     }
    });
 
-   return res.status(200).send(responce.data);
+   return res.status(200).send(responce.data.list);
 }
