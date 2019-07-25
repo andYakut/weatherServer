@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { saltRounds, privateKey } = require('../config/constants');
 const UserService = require('../services/user.services');
 const bcrypt = require('bcrypt');
@@ -21,6 +22,7 @@ exports.createUser = async (req, res, next) => {
 
     const hash = await bcrypt.hash(req.body.password, saltRounds);
     newUser = {
+      _id: new mongoose.Types.ObjectId(),
       email: req.body.email,
       username: req.body.username,
       password: hash,
@@ -44,7 +46,7 @@ exports.authUser = async (req, res, next) => {
     const match = await bcrypt.compare(req.body.password, user.password);
     
     if(match) {
-      //use id insted of email
+      //use id instead of email
       let token = jwt.sign({email: user.email}, privateKey, {expiresIn: 129600});
       return res.status(200).json({
         success: true, 
@@ -66,11 +68,5 @@ exports.authUser = async (req, res, next) => {
 }
 
 exports.checkLogin = async (req, res) => {  
-  try {
-    const decode = await jwt.verify(req.headers.token, privateKey);
-    const user = await UserService.findUser({ email: decode.email });
-    return res.status(200).json({message: "ok", checkLoginCompleted: true });
-  } catch (e) {
-    return res.status(403).json({message: "Forbidden"});
-  }
+  return res.status(200).json({message: "ok", checkLoginCompleted: true });
 }
