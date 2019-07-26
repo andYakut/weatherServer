@@ -3,6 +3,7 @@ const express = require('express'),
     mongoose = require('mongoose'),
     cors = require('cors'),
     user = require('./routes/user.routes'),
+    profile =require('./routes/profile.routes'),
     api = require('./routes/api.routes'),
     authMiddleware = require('./middlewares/auth.middleware'),
     server = express();
@@ -29,5 +30,6 @@ mongoose.connect('mongodb://localhost:27017/weatherForecast', {useNewUrlParser: 
 
 server.use('/auth', user);
 server.use('/api', authMiddleware.checkAuth, api);
+server.use('/profile', authMiddleware.checkAuth, profile);
 
 const PORT = process.env.port || 3001;

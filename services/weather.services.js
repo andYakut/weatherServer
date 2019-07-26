@@ -9,6 +9,15 @@ exports.addWeatherForecast = async (param) => {
   }
 }
 
+exports.getWeatherById = async (param) => {
+  try {
+    const result = Weather.findById(param, 'date cityName weatherList');
+    return result;
+  } catch(e) {
+    throw Error("This weather forecast doesn't exist");
+  }
+}
+
 exports.findUserWeatherHistory = async (param) => {
   try {
     const result = Weather.find({ owner: param }, 'date cityName');

@@ -53,3 +53,14 @@ exports.getWeatherHistory = async (req, res) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+exports.getWeatherDetails = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const result = await WeatherService.getWeatherById(id);
+    return res.status(200).json(result);
+  } catch(e) {
+    return res.status(500).json({ message: e.message });
+  }
+}

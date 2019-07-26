@@ -29,16 +29,16 @@ exports.findUserById = async (param) => {
 
 exports.updateUser = async (param, newData) => {
   try {
-    const result = await User.findOneAndUpdate(
+    const result = await User.updateOne(
       {
         _id: param._id
-      }, {
-        $push: {
-          weathers: newData
+      },
+      {
+        $set: {
+          username: newData.username,
+          password: newData.password
         }
-      }, {
-        useFindAndModify: false
-      })
+      });
     return result;
   } catch (e) {
     throw Error(`Cann't update a user ${user.name}`)
