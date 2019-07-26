@@ -18,8 +18,6 @@ exports.createUser = async (req, res, next) => {
     const findUser = await UserService.findUser({ email: req.body.email });
     if (findUser) throw new Error('This user already exists')
 
-    // make hash of the password using bcrypt
-
     const hash = await bcrypt.hash(req.body.password, saltRounds);
     newUser = {
       _id: new mongoose.Types.ObjectId(),
@@ -43,15 +41,15 @@ exports.authUser = async (req, res, next) => {
 
   try {
     const user = await UserService.findUser({ email: req.body.email });
+    if(user === null) {
+      return res.status(404).json({message: `User with email ${req.body.email} doesn't exist`});
+    }
     const match = await bcrypt.compare(req.body.password, user.password);
-    
     if(match) {
-      //use id instead of email
-      let token = jwt.sign({email: user.email}, privateKey, {expiresIn: 129600});
+      let token = jwt.sign({id: user._id}, privateKey, {expiresIn: 129600});
       return res.status(200).json({
         success: true, 
         message: "You are login now",
-        checkLoginCompleted: true,
         token
       });
     } else {
@@ -68,5 +66,5 @@ exports.authUser = async (req, res, next) => {
 }
 
 exports.checkLogin = async (req, res) => {  
-  return res.status(200).json({message: "ok", checkLoginCompleted: true });
+  return res.status(200).json({message: "ok"});
 }

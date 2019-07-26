@@ -5,8 +5,7 @@ const UserSchema = new mongoose.Schema({
   username: String,
   email: String,
   password: String,
-  created: { type: Date, default: Date.now },
-  weathers: [{type: mongoose.Schema.Types.ObjectId, ref: 'WeatherHistory'}]
+  created: { type: Date, default: Date.now }
 });
 
 const User = mongoose.model('User', UserSchema);

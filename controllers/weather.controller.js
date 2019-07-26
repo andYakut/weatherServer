@@ -19,8 +19,8 @@ exports.getWeather = async (req, res) => {
     return {
       index: String(index),
       temperature: item.main.temp,
-      Date: item.dt_txt,
-      Conditions: item.weather[0].main
+      date: item.dt_txt,
+      conditions: item.weather[0].main
     }
   })
 
@@ -33,13 +33,23 @@ exports.getWeather = async (req, res) => {
 
   try {
     const result = await WeatherService.addWeatherForecast(newWeather);
-    await UserService.updateUser(user, result);
     return res.status(200).json({
       cityName: result.cityName,
       date: result.date,
       list: result.weatherList
     });
   } catch (e) {
-    res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+exports.getWeatherHistory = async (req, res) => {
+  const user = req.user;
+
+  try {
+    const result = await WeatherService.findUserWeatherHistory(user._id);
+    return res.status(200).json(result);
+  } catch (e) {
+    return res.status(500).json({ message: 'Internal server error' });
   }
 }

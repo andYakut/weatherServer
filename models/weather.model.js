@@ -7,8 +7,8 @@ const WeatherHistorySchema = new mongoose.Schema({
   weatherList: [{
     index: String,
     temperature: Number,
-    Date: String,
-    Conditions: String,
+    date: String,
+    conditions: String,
   }]
 });
 

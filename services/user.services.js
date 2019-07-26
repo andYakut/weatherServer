@@ -18,6 +18,15 @@ exports.findUser = async (param) => {
   }
 }
 
+exports.findUserById = async (param) => {
+  try {
+    const result = await User.findById(param);
+    return result;
+  } catch (e) {
+    throw Error(`Cann't find a user with id=${param}`);
+  }
+}
+
 exports.updateUser = async (param, newData) => {
   try {
     const result = await User.findOneAndUpdate(
